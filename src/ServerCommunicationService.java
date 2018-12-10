@@ -8,37 +8,40 @@ import static java.lang.Short.valueOf;
 
 public class ServerCommunicationService {
 
-    interface CallBack<T>{
+    interface CallBack<T> {
         void callingBack(T data);
     }
 
     CallBack callBack;
 
-    public static void checkConnection(String ip, int port, CallBack<Boolean> callBack){
-        Thread thread = new Thread(){
+    public static void checkConnection(String ip, int port, CallBack<Boolean> callBack) {
+        Thread thread = new Thread() {
             @Override
             public void run() {
                 boolean status = true;
                 Connection connection = null;
                 try {
                     connection = new Connection(ip, port);
-                } catch (UnknownHostException e){
+                } catch (UnknownHostException e) {
+                    System.out.println("checkConnection UnknownHostException");
                     status = false;
                 } catch (IOException e) {
                     e.printStackTrace();
+                    System.out.println("checkConnection IOException");
                     status = false;
+                } finally {
+                    connection.closeConnection();
                 }
-                connection.closeConnection();
                 callBack.callingBack(status);
             }
         };
         thread.start();
     }
 
-    public void getPinsStatus(String ip, int port,CallBack<List<Controller>> callback) {
-        Thread thread = new Thread(){
-            public void run(){
-                List<Controller> controllers = new ArrayList <>();
+    public void getPinsStatus(String ip, int port, CallBack<List<Controller>> callback) {
+        Thread thread = new Thread() {
+            public void run() {
+                List<Controller> controllers = new ArrayList<>();
                 Connection connection = null;// call socket
                 try {
                     connection = new Connection(ip, port);
@@ -47,10 +50,10 @@ public class ServerCommunicationService {
                 }
                 try {
                     connection.sendMassage("getPinsStatus");
-                    String controllersCount =connection.receiveMassage();
-                    for (int i = 0; i < valueOf(controllersCount); i++){
+                    String controllersCount = connection.receiveMassage();
+                    for (int i = 0; i < valueOf(controllersCount); i++) {
                         String controllerInfo = connection.receiveMassage();
-                        parseItems(controllers,controllerInfo);
+                        parseItems(controllers, controllerInfo);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -62,7 +65,7 @@ public class ServerCommunicationService {
         thread.start();
     }
 
-    private  void parseItems(List<Controller> controllers, String contrillerInfo){
+    private void parseItems(List<Controller> controllers, String contrillerInfo) {
         String separator = ";";
         String[] info = contrillerInfo.split(separator);
         Controller controller = new Controller();

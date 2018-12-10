@@ -15,6 +15,7 @@ public class Connection {
 	private Socket socket;
 
 	public Connection(String ip, int port) throws IOException {
+		System.out.println("Connection constructor");
 		this.socket = new Socket(ip,port);
 	}
 
