@@ -13,35 +13,11 @@ public class Connection {
     
 	
 	private Socket socket;
-	private String ip;
-	private int port;
-	
-	private static Connection instance;
-	
-	private Connection(String ip, int port){
-		this.ip = ip;
-		this.port = port;
-		openSocket();
+
+	public Connection(String ip, int port) throws IOException {
+		this.socket = new Socket(ip,port);
 	}
 
-	private void openSocket() {
-		this.socket = null;
-		try {
-			socket = new Socket(ip,port);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public static Connection getInstance(String ip, int port) {
-		
-		if(instance == null) {
-			instance = new Connection(ip, port);
-		}
-		return instance;
-	}
-	
 	public void closeConnection() {
 		try {
             out.writeObject("close");

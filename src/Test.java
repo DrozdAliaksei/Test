@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +41,17 @@ public class Test {
 			}
 		});
 		Thread.sleep(2000);
-	*/}
+	*/
+
+	String ip = "192.168.100.14";
+	int port = 5050;
+
+        try {
+            Socket socket = new Socket(ip,port);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }

@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,12 +18,17 @@ public class ServerCommunicationService {
         Thread thread = new Thread(){
             @Override
             public void run() {
-                boolean status;
-                Connection connection = Connection.getInstance(ip, port);
-                if(connection == null){
+                boolean status = true;
+                Connection connection = null;
+                try {
+                    connection = new Connection(ip, port);
+                } catch (UnknownHostException e){
+                    status = false;
+                } catch (IOException e) {
+                    e.printStackTrace();
                     status = false;
                 }
-                else status = true;
+                connection.closeConnection();
                 callBack.callingBack(status);
             }
         };
@@ -33,7 +39,12 @@ public class ServerCommunicationService {
         Thread thread = new Thread(){
             public void run(){
                 List<Controller> controllers = new ArrayList <>();
-                Connection connection = Connection.getInstance(ip, port);// call socket
+                Connection connection = null;// call socket
+                try {
+                    connection = new Connection(ip, port);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 try {
                     connection.sendMassage("getPinsStatus");
                     String controllersCount =connection.receiveMassage();
