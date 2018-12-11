@@ -12,8 +12,6 @@ public class ServerCommunicationService {
         void callingBack(T data);
     }
 
-    CallBack callBack;
-
     public static void checkConnection(String ip, int port, CallBack<Boolean> callBack) {
         Thread thread = new Thread() {
             @Override
@@ -30,7 +28,9 @@ public class ServerCommunicationService {
                     System.out.println("checkConnection IOException");
                     status = false;
                 } finally {
-                    connection.closeConnection();
+                    if (connection != null) {
+                        connection.closeConnection();
+                    }
                 }
                 callBack.callingBack(status);
             }

@@ -17,16 +17,21 @@ public class Connection {
 	public Connection(String ip, int port) throws IOException {
 		System.out.println("Connection constructor");
 		this.socket = new Socket(ip,port);
+        this.out = new ObjectOutputStream(socket.getOutputStream());
+        this.out.flush();
+        this.in = new ObjectInputStream(socket.getInputStream());
 	}
 
 	public void closeConnection() {
 		try {
-            out.writeObject("close");
-            out.close();
-            in.close();
-            socket.close();
+		    System.out.println("closeConnection");
+            this.out.writeObject("close");
+            this.out.close();
+            this.in.close();
+            this.socket.close();
         } catch (IOException ex) {
             ex.printStackTrace();
+            System.out.println("closeConnection IOException");
         }
     }
 	
