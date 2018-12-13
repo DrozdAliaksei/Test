@@ -19,7 +19,7 @@ public class ServerCommunicationService {
                 boolean status = true;
                 Connection connection = null;
                 try {
-                    connection = new Connection(ip, port);
+                        connection = new Connection(ip, port);
                 } catch (UnknownHostException e) {
                     System.out.println("checkConnection UnknownHostException");
                     status = false;

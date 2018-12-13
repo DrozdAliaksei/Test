@@ -10,7 +10,7 @@ public class Connection {
 	
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
-    
+
 	
 	private Socket socket;
 
@@ -20,7 +20,15 @@ public class Connection {
         this.out = new ObjectOutputStream(socket.getOutputStream());
         this.out.flush();
         this.in = new ObjectInputStream(socket.getInputStream());
-	}
+
+        try {
+            if(in.readObject().equals("Hello, Welcome to RPI")){
+                System.out.println("Hello, Welcome to RPI");
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
 	public void closeConnection() {
 		try {
